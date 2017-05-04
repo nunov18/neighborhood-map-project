@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Discover Porto</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="col-xs-2 col-sm-1">
+            <a id="menu">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z" />
+                </svg>
+            </a>
+        </div>
+        <div class=" col-xs-10 col-sm-11">
+            <h1 class="text">Discover Porto, Portugal <small> Nuno Vieira's Picks</small></h1>
+        </div>
+    </div>
+    <div id="drawer" class="option-box nav">
+        <p class="text">Porto, also known as Oporto in English is the second largest city in Portugal after Lisbon and one of the major urban areas of the Iberian Peninsula.
+            <br>Located along the Douro river estuary in Northern Portugal, Porto is one of the oldest European centres, and its historical core was proclaimed a World Heritage Site by UNESCO in 1996.</p>
+        <input class="form-control" placeholder="Filter" type="search" data-bind="textInput: viewModel.filter, event: {keyup: viewModel.markersVisible}">
+        <ul data-bind="foreach: viewModel.filteredItems">
+            <li class="btn btn-default text" style="width: 200px; margin: 5px;" type="button" data-bind="text: title, click: viewModel.clickPoi"></li>
+        </ul>
+        <hr>
+        <p>
+            <h6 class="text-center"><i>Nuno Vieira 2017</i></h6>
+        </p>
+    </div>
+    <div id="map" class="col-xs-12 col-sm-12"></div>
+    <script type='text/javascript' src='js/lib/knockout-min.js'></script>
+    <script type='text/javascript' src='js/lib/jquery.min.js'></script>
+    <script type='text/javascript' src='js/app.js'></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9BPGoJjldazmeDOPQc7324Krc-NHV2oo&libraries=geometry&v=3&callback=initMap"></script>
+</body>
+</html>
