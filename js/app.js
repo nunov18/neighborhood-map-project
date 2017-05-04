@@ -89,12 +89,6 @@ var locations = [{
     },
 ];
 //**----The ViewModel----**//
-// Alerts the user that there has been an error unless the maps api responds within 5 seconds.
-setTimeout(function() {
-    if (!window.google || !window.google.maps) {
-        alert('There is a problem with the Google Maps API. Please check back later.')
-    }
-}, 5000);
 // Maps api asynchronous load code here.
 var map;
 var markers = [];
@@ -175,34 +169,19 @@ var viewModel = {
                 var version = '20170101';
                 // Generate the url that we use in the .ajax request towards foursquare.
                 var searchLink = foursquareLink + marker.id + '?client_id=' + clientId + '&client_secret=' + clientSecret + '&v=' + version;
-                infowindow.setContent('<div class="lead text-center"><h4>' + marker.title + '</h4></div><div id="photo"></div>');
-                $.ajax({
-                    url: searchLink
-                }).done(function(data) {
-                    // Adds the best photo to the infowindow
-                    if (data.response.venue.bestPhoto) {
-                        var bestPhoto = data.response.venue.bestPhoto.prefix + 'width250' + data.response.venue.bestPhoto.suffix;
-                        $('#photo').append('<img src="' + bestPhoto + '" class="img-thumbnail center-block">');
+
+                $.getJSON(searchLink, function(data) {
+                    var bestPhoto = data.response.venue.bestPhoto.prefix + 'width250' + data.response.venue.bestPhoto.suffix;
+                    var rating = data.response.venue.rating;
+                    var fsUrl = data.response.venue.canonicalUrl;
+                    if (bestPhoto, rating, fsUrl) {
+                        infowindow.setContent('<div class="lead text-center"><h4>' + marker.title + '</h4></div><div id="photo"></div><div><img src="' + bestPhoto + '" class="img-thumbnail center-block"></div><div><p> <h5>Foursquare Rating: <span class="venueScore positive"><span>' + rating + '</span><sup>/<span>10</span></sup></h5></p></div><div><a href=' + fsUrl + '><button type="button" class="btn btn-primary center-block"> Foursquare link</button> </a> </div>');
                     } else {
-                        $('#photo').append('<p>No photos exist of this place. Suspicious?</p>');
+                        infowindow.setContent('<div>Nothing Found</div>');
                     }
-                    // Adds the rating of the point of interest
-                    if (data.response.venue.rating) {
-                        var rating = data.response.venue.rating;
-                        $('#photo').append('<p> <h5>Foursquare Rating: <span class="venueScore positive"><span>' + rating + '</span><sup>/<span>10</span></sup></h5></p>');
-                    } else {
-                        $('#photo').append('<p>No rating available</p>');
-                    }
-                    // Adds the foursquare link of the point of interest
-                    if (data.response.venue.canonicalUrl) {
-                        var fsUrl = data.response.venue.canonicalUrl;
-                        $('#photo').append('<a href=' + fsUrl + '><button type="button" class="btn btn-primary center-block"> Foursquare link</button> </a>');
-                    } else {
-                        $('#photo').append('<p>No link available</p>');
-                    }
-                }).error(function() {
-                    alert("There is a problem with our Foursquare data, and you will not be able to see more information. Please come back at a later date.");
-                })
+                }).fail(function() {
+                    infowindow.setContent('<div>No Foursquare information was Found for ' + marker.title + '!</div>');
+                });
             }
             // Open the infowindow on the correct marker.
             viewModel.toggleBounce(marker);
@@ -226,6 +205,7 @@ viewModel.filteredItems = ko.computed(function() {
 }, viewModel);
 
 function initMap() {
+
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
             lat: 41.157944,
@@ -252,3 +232,8 @@ $(window).resize(function() {
 
     $('#map').css('height', (h - offsetTop));
 }).resize();
+
+// Error call handler
+var mapsInitError = function() {
+    alert("Google Maps failed to load");
+};

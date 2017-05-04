@@ -17,6 +17,11 @@ body {
   right: 0px;
 }
 
+.box {
+  width: 200px;
+  margin: 5px;
+}
+
 .option-box {
   background: #fff;
   height: 100%;
@@ -80,3 +85,35 @@ svg {
 .positive {
   background: #00b551;
 }
+
+/*
+
+$.ajax({
+    url: searchLink
+}).done(function(data) {
+    // Adds the best photo to the infowindow
+    if (data.response.venue.bestPhoto) {
+        var bestPhoto = data.response.venue.bestPhoto.prefix + 'width250' + data.response.venue.bestPhoto.suffix;
+        $('#photo').append('<img src="' + bestPhoto + '" class="img-thumbnail center-block">');
+    } else {
+        $('#photo').append('<p>No photos exist of this place. Suspicious?</p>');
+    }
+    // Adds the rating of the point of interest
+    if (data.response.venue.rating) {
+        var rating = data.response.venue.rating;
+        $('#photo').append('<p> <h5>Foursquare Rating: <span class="venueScore positive"><span>' + rating + '</span><sup>/<span>10</span></sup></h5></p>');
+    } else {
+        $('#photo').append('<p>No rating available</p>');
+    }
+    // Adds the foursquare link of the point of interest
+    if (data.response.venue.canonicalUrl) {
+        var fsUrl = data.response.venue.canonicalUrl;
+        $('#photo').append('<a href=' + fsUrl + '><button type="button" class="btn btn-primary center-block"> Foursquare link</button> </a>');
+    } else {
+        $('#photo').append('<p>No link available</p>');
+    }
+}).error(function() {
+    alert("There is a problem with our Foursquare data, and you will not be able to see more information. Please come back later.");
+})
+
+*/
